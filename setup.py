@@ -21,6 +21,8 @@
 
 from setuptools import setup, find_packages
 
+from decyclify import __version__ as version
+
 install_requires = []
 
 setup(
@@ -33,7 +35,7 @@ setup(
     license_file='LICENSE',
     platforms='any',
     python_requires='>=3.7',
-    version='0.1',
+    version=version,
     packages=find_packages(include=["decyclify.*"]),
     install_requires=install_requires,
     project_urls={
