@@ -6,6 +6,16 @@ Graph decyclify algorithm implementation as in Sandnes &amp; Sinnen paper (2004)
 
 See open issues for current status of the project.
 
+## decyclify algorithm
+
+The algorithm uses two matrices, `D` and `C`.
+
+**`D`** is the **intraiteration dependencies** matrix. It represents the dependencies
+in the graph within a cycle.
+
+**`C`** is the **inteiteration dependencies** matrix. It represents the dependencies
+in the graph between cycles.
+
 ## License
 
 Licensed under the Apache License. See `LICENSE` for more.
