@@ -16,6 +16,12 @@ in the graph within a cycle.
 **`C`** is the **inteiteration dependencies** matrix. It represents the dependencies
 in the graph between cycles.
 
+## Changelog
+
+**0.1 (2020-??-??)**
+
+- [#1](https://github.com/kinow/decyclify/issues/1) Build and packaging
+
 ## License
 
 Licensed under the Apache License. See `LICENSE` for more.
