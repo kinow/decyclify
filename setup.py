@@ -41,15 +41,8 @@ extras_require['all'] = (
 )
 
 setup(
-    name='decyclify',
-    description='Graph decyclify algorithm implementation as in Sandnes & Sinnen paper (2004) in Python',
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
-    url='https://github.com/kinow/decyclify',
-    license='Apache License 2.0',
-    license_file='LICENSE',
-    platforms='any',
-    python_requires='>=3.7',
     version=version,
     packages=find_packages(include=["decyclify.*"]),
     install_requires=install_requires,
