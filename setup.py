@@ -23,7 +23,8 @@ install_requires = [
 ]
 
 tests_require = [
-    'pytest==5.4.*'
+    'pytest==5.4.*',
+    'coverage==5.2.*'
 ]
 
 extras_require = {
