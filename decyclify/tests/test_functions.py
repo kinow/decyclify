@@ -17,9 +17,12 @@
 Tests for `decyclify.functions`.
 """
 
+from collections import Iterable
+
 import networkx as nx
 import pytest
-from decyclify.functions import decyclify
+
+from decyclify.functions import decyclify, decyclify_networkx
 
 
 def test_graph_creation():
@@ -43,3 +46,20 @@ def test_graph_creation():
 def test_decyclify_invalid_args(exc, args):
     with pytest.raises(exc):
         decyclify(*args)
+
+
+@pytest.mark.parametrize('exc, args', [
+    (TypeError, ['string', 1]),
+    (TypeError, [nx.DiGraph({'a': {'b': {}}}), 'string']),
+    (TypeError, [None, 1]),
+    (TypeError, [nx.DiGraph({'a': {'b': {}}}), None]),
+    (ValueError, [nx.DiGraph({'a': {'b': {}}}), 0])
+])
+def test_decyclify_networkx_invalid_args(exc, args):
+    with pytest.raises(exc):
+        decyclify_networkx(*args)
+
+
+def test_empty_graph():
+    g = decyclify([])
+    assert isinstance(g, Iterable)
