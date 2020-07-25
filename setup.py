@@ -23,7 +23,25 @@ from setuptools import setup, find_packages
 
 from decyclify import __version__ as version
 
-install_requires = []
+install_requires = [
+    'networkx==2.4.*'
+]
+
+tests_require = [
+    'pytest==5.4.*'
+]
+
+extras_require = {
+    'all': []
+}
+extras_require['all'] = (
+    tests_require
+    + list({
+        req
+        for reqs in extras_require.values()
+        for req in reqs
+    })
+)
 
 setup(
     name='decyclify',
@@ -38,6 +56,8 @@ setup(
     version=version,
     packages=find_packages(include=["decyclify.*"]),
     install_requires=install_requires,
+    tests_require=tests_require,
+    extras_require=extras_require,
     project_urls={
         "Documentation": "https://github.com/kinow/decyclify",
         "Source": "https://github.com/kinow/decyclify",
