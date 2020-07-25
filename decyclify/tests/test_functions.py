@@ -18,6 +18,8 @@ Tests for `decyclify.functions`.
 """
 
 import networkx as nx
+import pytest
+from decyclify.functions import decyclify
 
 
 def test_graph_creation():
@@ -29,3 +31,15 @@ def test_graph_creation():
     graph.add_edge('c', 'a')
     print()
     print(graph.adj)
+
+
+@pytest.mark.parametrize('exc, args', [
+    (TypeError, ['string', 1]),
+    (TypeError, [["a b"], 'string']),
+    (TypeError, [None, 1]),
+    (TypeError, [["a b"], None]),
+    (ValueError, [["a b"], 0])
+])
+def test_decyclify_invalid_args(exc, args):
+    with pytest.raises(exc):
+        decyclify(*args)
