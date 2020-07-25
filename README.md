@@ -20,6 +20,7 @@ in the graph between cycles.
 
 **0.1 (2020-??-??)**
 
+- [#2](https://github.com/kinow/decyclify/issues/2) Graph input
 - [#1](https://github.com/kinow/decyclify/issues/1) Build and packaging
 
 ## License
