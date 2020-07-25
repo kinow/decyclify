@@ -17,5 +17,8 @@
 # under the License.
 #
 
-def decyclify():
-    pass
+def decyclify(number_of_cycles=1):
+    if not isinstance(number_of_cycles, int):
+        raise TypeError(f"Number of cycles must be an integer, but '{type(number_of_cycles)}' given")
+    if number_of_cycles < 1:
+        raise ValueError(f"Number of cycles must be at least '1', but '{number_of_cycles}' given")
