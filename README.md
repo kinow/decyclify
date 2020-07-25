@@ -13,7 +13,7 @@ The algorithm uses two matrices, `D` and `C`.
 **`D`** is the **intraiteration dependencies** matrix. It represents the dependencies
 in the graph within a cycle.
 
-**`C`** is the **inteiteration dependencies** matrix. It represents the dependencies
+**`C`** is the **interiteration dependencies** matrix. It represents the dependencies
 in the graph between cycles.
 
 ## Changelog
