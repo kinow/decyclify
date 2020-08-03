@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Iterable
+from typing import List
 
+import numpy as np
 from networkx import DiGraph
 from networkx.readwrite.edgelist import parse_edgelist
 
@@ -27,7 +28,7 @@ def decyclify(graph: List, number_of_cycles: int=1):
     :param number_of_cycles: number of cycles to be generated
     :type number_of_cycles: int
     :return: a DCG that is iterable and contains multiple cycles, each cycle with a single DAG
-    :rtype: Iterable
+    :rtype: List
     """
     if not isinstance(graph, list):
         raise TypeError(f"Graph must be a List, but '{type(graph)}' given")
@@ -44,7 +45,7 @@ def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
     :param number_of_cycles: number of cycles to be generated
     :type number_of_cycles: int
     :return: a DCG that is iterable and contains multiple cycles, each cycle with a single DAG
-    :rtype: Iterable
+    :rtype: List
     """
     if not isinstance(graph, DiGraph):
         raise TypeError(f"Graph must be a networkx.DiGraph, but '{type(graph)}' given")
@@ -52,4 +53,9 @@ def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
         raise TypeError(f"Number of cycles must be an integer, but '{type(number_of_cycles)}' given")
     if number_of_cycles < 1:
         raise ValueError(f"Number of cycles must be at least '1', but '{number_of_cycles}' given")
-    return []
+    nodes = graph.nodes
+    number_of_nodes = len(nodes)
+
+    matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), -1)
+
+    return matrix_intraiteration.tolist()

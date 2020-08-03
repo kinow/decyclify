@@ -34,6 +34,7 @@ def test_graph_creation():
     graph.add_edge('c', 'a')
     print()
     print(graph.adj)
+    print(graph.nodes)
 
 
 @pytest.mark.parametrize('exc, args', [
@@ -63,3 +64,15 @@ def test_decyclify_networkx_invalid_args(exc, args):
 def test_empty_graph():
     g = decyclify([])
     assert isinstance(g, Iterable)
+
+
+@pytest.mark.parametrize('n, graph_string', [
+    (2, ['a b']),
+    (3, ['a b', 'b c']),
+    (4, ['a b', 'b c', 'c d']),
+    (10, ['a b', 'b c', 'c d', 'd e', 'e f', 'f g', 'g h', 'h i', 'i j'])
+])
+def test_decyclify_matrix_dimensions(n, graph_string):
+    g = decyclify(graph_string)
+    assert len(g[0]) == n
+    assert len(g[1]) == n
