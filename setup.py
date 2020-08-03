@@ -19,7 +19,8 @@ from setuptools import setup, find_packages
 from decyclify import __version__ as version
 
 install_requires = [
-    'networkx==2.4.*'
+    'networkx==2.4.*',
+    'numpy==1.19.*'
 ]
 
 tests_require = [
