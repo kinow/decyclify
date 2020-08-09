@@ -20,7 +20,8 @@ from decyclify import __version__ as version
 
 install_requires = [
     'networkx==2.4.*',
-    'numpy==1.19.*'
+    'numpy==1.19.*',
+    'tabulate==0.8.*'
 ]
 
 tests_require = [
