@@ -17,12 +17,10 @@
 Tests for `decyclify.functions`.
 """
 
-from collections import Iterable
-
 import networkx as nx
 import pytest
 
-from decyclify.functions import decyclify, decyclify_networkx
+from decyclify.functions import *
 
 
 def test_graph_creation():
@@ -33,8 +31,8 @@ def test_graph_creation():
     graph.add_edge('b', 'd')
     graph.add_edge('c', 'a')
     print()
-    print(graph.adj)
-    print(graph.nodes)
+    g = decyclify_networkx(graph)
+    print_matrix(g, graph.nodes)
 
 
 @pytest.mark.parametrize('exc, args', [
@@ -76,3 +74,29 @@ def test_decyclify_matrix_dimensions(n, graph_string):
     g = decyclify(graph_string)
     assert len(g[0]) == n
     assert len(g[1]) == n
+
+
+def test_print_matrix(capsys):
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'd')
+    graph.add_edge('d', 'b')
+    graph.add_edge('d', 'c')
+    graph.add_edge('b', 'd')
+    graph.add_edge('c', 'a')
+    g = decyclify_networkx(graph)
+    print_matrix(g, graph.nodes)
+    out, _ = capsys.readouterr()
+    assert '[-1 -1 -1 -1]' in out
+
+
+def test_print_matrix_tabulate(capsys):
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'd')
+    graph.add_edge('d', 'b')
+    graph.add_edge('d', 'c')
+    graph.add_edge('b', 'd')
+    graph.add_edge('c', 'a')
+    g = decyclify_networkx(graph)
+    print_matrix(g, graph.nodes, tabulate=True)
+    out, _ = capsys.readouterr()
+    assert 'a   d   b   c' in out

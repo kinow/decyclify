@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections import Iterable
 from typing import List
 
 import numpy as np
 from networkx import DiGraph
 from networkx.readwrite.edgelist import parse_edgelist
+from tabulate import tabulate as tabulate_fn
 
 
 def decyclify(graph: List, number_of_cycles: int=1):
@@ -59,3 +61,26 @@ def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
     matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), -1)
 
     return matrix_intraiteration
+
+
+def print_matrix(matrix: np.ndarray, nodes: Iterable, tabulate: bool = False) -> None:
+    """
+    Print the matrix tabulated.
+    :param matrix:
+    :param nodes:
+    :param tabulate:
+    """
+    if tabulate:
+        # copy the original data
+        # change type to object so we can prepend columns with strings
+        matrix_copy = np.array(matrix, copy=True).astype(dtype=object)
+
+        # add a header row with the nodes
+        matrix_copy = np.vstack((nodes, matrix_copy))
+
+        # add a header column with the nodes (compensate for new header row with an empty space)
+        matrix_copy = np.insert(matrix_copy, 0, np.concatenate(([' '], nodes)), axis=1)
+
+        print(tabulate_fn(matrix_copy))
+    else:
+        print(matrix)
