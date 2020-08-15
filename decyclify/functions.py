@@ -30,40 +30,29 @@ def _cycle_exists(cycles: List, from_node: object, to_node: object):
             return True
     return False
 
-def decyclify(graph: List, number_of_cycles: int=1):
-    """
-    Decyclify a directed cyclic graph (DCG) into a directed acyclic graph (DAG) with cycles.
 
-    :param graph: the graph
-    :type graph: List
-    :param number_of_cycles: number of cycles to be generated
-    :type number_of_cycles: int
-    :return: a DCG that is iterable and contains multiple cycles, each cycle with a single DAG
-    :rtype: np.ndarray
-    """
-    if not isinstance(graph, list):
-        raise TypeError(f"Graph must be a List, but '{type(graph)}' given")
-    g = parse_edgelist(graph, create_using=DiGraph)
-    return decyclify_networkx(g, number_of_cycles)
-
-def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
+def decyclify(graph: Union[List, DiGraph], number_of_cycles: int=1):
     """
     Sibling function of `decyclify`, that takes as argument a networkx
     object.
 
     :param graph: a networkx object representing the input graph
-    :rtype graph: DiGraph
+    :rtype graph: Union[List, DiGraph]
     :param number_of_cycles: number of cycles to be generated
     :type number_of_cycles: int
     :return: a DCG that is iterable and contains multiple cycles, each cycle with a single DAG
     :rtype: Tuple[np.ndarray, np.ndarray]
     """
-    if not isinstance(graph, DiGraph):
-        raise TypeError(f"Graph must be a networkx.DiGraph, but '{type(graph)}' given")
+    if not isinstance(graph, DiGraph) and not isinstance(graph, List):
+        raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
     if not isinstance(number_of_cycles, int):
         raise TypeError(f"Number of cycles must be an integer, but '{type(number_of_cycles)}' given")
     if number_of_cycles < 1:
         raise ValueError(f"Number of cycles must be at least '1', but '{number_of_cycles}' given")
+
+    if isinstance(graph, List):
+        graph = parse_edgelist(graph, create_using=DiGraph)
+
     nodes = graph.nodes
     number_of_nodes = len(nodes)
     adjacent_nodes: dict = graph.adj

@@ -59,7 +59,7 @@ def test_decyclify_invalid_args(exc, args):
 ])
 def test_decyclify_networkx_invalid_args(exc, args):
     with pytest.raises(exc):
-        decyclify_networkx(*args)
+        decyclify(*args)
 
 
 def test_empty_graph():
