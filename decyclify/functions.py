@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from collections import Iterable
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 from networkx import DiGraph
@@ -21,6 +21,14 @@ from networkx.algorithms.cycles import simple_cycles
 from networkx.readwrite.edgelist import parse_edgelist
 from tabulate import tabulate as tabulate_fn
 
+
+def _cycle_exists(cycles: List, from_node: object, to_node: object):
+    for cycle in cycles:
+        # is the to_node at the end of the cycle (target)?, and,
+        # is the other node one of the source nodes?
+        if cycles[-1] == to_node and from_node in cycle:
+            return True
+    return False
 
 def decyclify(graph: List, number_of_cycles: int=1):
     """
@@ -79,7 +87,7 @@ def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
                 # note that the original paper had its own algorithm
                 # for coloring nodes and removing back-edges, but it
                 # was simpler to use networkx for now
-                if [node_2, node_1] in cycles:
+                if _cycle_exists(cycles, from_node=node_2, to_node=node_1):
                     # add to matrix C
                     matrix_interiteration.itemset((i, j), 1)
                 else:
@@ -88,6 +96,44 @@ def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
 
     return matrix_intraiteration, matrix_interiteration
 
+def create_matrices(graph: Union[DiGraph, List]):
+    if not isinstance(graph, DiGraph) and not isinstance(graph, List):
+        raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
+
+    if isinstance(graph, List):
+        graph = parse_edgelist(graph, create_using=DiGraph)
+
+    nodes = graph.nodes
+    number_of_nodes = len(nodes)
+    adjacent_nodes: dict = graph.adj
+    cycles: list = list(simple_cycles(graph))
+
+    # create matrix filled with -1's
+    matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), 0)
+    matrix_interiteration = np.full((number_of_nodes, number_of_nodes), 0)
+
+    for i, node_1 in enumerate(nodes):
+        for j, node_2 in enumerate(nodes):
+            # ignore diagonal (same node)
+            if i == j:
+                continue
+            node_2_adjacent_nodes = adjacent_nodes.get(node_2)
+            if node_1 in node_2_adjacent_nodes:
+                # here we have two adjacent nodes, they could be either
+                # cyclic or acyclic; the only way to tell which one we
+                # have, is by looking at the list of simple cycles
+                #
+                # note that the original paper had its own algorithm
+                # for coloring nodes and removing back-edges, but it
+                # was simpler to use networkx for now
+                if _cycle_exists(cycles, from_node=node_2, to_node=node_1):
+                    # add to matrix C
+                    matrix_interiteration.itemset((i, j), 1)
+                else:
+                    # add to matrix D
+                    matrix_intraiteration.itemset((i, j), 1)
+
+    return matrix_intraiteration, matrix_interiteration
 
 def print_matrix(matrix: np.ndarray, nodes: Iterable, tabulate: bool = False) -> None:
     """

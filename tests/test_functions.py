@@ -31,7 +31,7 @@ def test_graph_creation():
     graph.add_edge('c', 'd')
     # graph.add_edge('d', 'c')
     print()
-    d, c = decyclify_networkx(graph)
+    d, c = create_matrices(graph)
     print_matrix(d, graph.nodes, True)
     print_matrix(c, graph.nodes, True)
     print(graph.adj)
@@ -73,8 +73,8 @@ def test_empty_graph():
     (4, ['a b', 'b c', 'c d']),
     (10, ['a b', 'b c', 'c d', 'd e', 'e f', 'f g', 'g h', 'h i', 'i j'])
 ])
-def test_decyclify_matrix_dimensions(n, graph_string):
-    g = decyclify(graph_string)
+def test_create_matrices_matrix_dimensions(n, graph_string):
+    g = create_matrices(graph_string)
     assert len(g[0]) == n
     assert len(g[1]) == n
 
@@ -86,7 +86,7 @@ def test_print_matrix(capsys):
     graph.add_edge('d', 'c')
     graph.add_edge('b', 'd')
     graph.add_edge('c', 'a')
-    intra, inter = decyclify_networkx(graph)
+    intra, inter = create_matrices(graph)
     print_matrix(intra, graph.nodes)
     out, _ = capsys.readouterr()
     assert '[-1 -1 -1 -1]' not in out
@@ -100,7 +100,9 @@ def test_print_intra_matrix_tabulate(capsys):
     graph.add_edge('d', 'c')
     graph.add_edge('b', 'd')
     graph.add_edge('c', 'a')
-    intra, inter = decyclify_networkx(graph)
+    intra, inter = create_matrices(graph)
     print_matrix(intra, graph.nodes, tabulate=True)
     out, _ = capsys.readouterr()
-    assert 'a d b c' in ' '.join(out.split())
+    # have only one white space between letters
+    out = ' '.join(out.split())
+    assert '' in out
