@@ -31,11 +31,8 @@ def test_graph_creation():
     graph.add_edge('c', 'd')
     # graph.add_edge('d', 'c')
     print()
-    d, c = create_matrices(graph)
+    d, c = decyclify(graph)
     print_matrix(d, graph.nodes, True)
-    print_matrix(c, graph.nodes, True)
-    print(graph.adj)
-    print(list(nx.algorithms.simple_cycles(graph)))
 
 
 @pytest.mark.parametrize('exc, args', [

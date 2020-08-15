@@ -31,13 +31,26 @@ def _cycle_exists(cycles: List, from_node: object, to_node: object):
     return False
 
 
-def decyclify(graph: Union[List, DiGraph], number_of_cycles: int=1):
+def _dfs_visit(graph, node):
+    graph.nodes[node]['color'] = 'gray'
+    for vertex in graph.adj.copy().get(node):
+        vertex_color = graph.nodes[vertex]['color']
+        if vertex_color == 'white':
+            # recursive call
+            _dfs_visit(graph, vertex)
+        elif vertex_color == 'gray':
+            # remove back link
+            graph.remove_edge(node, vertex)
+    graph.nodes[node]['color'] = 'black'
+
+def decyclify(graph: Union[List, DiGraph], start_node: object=None, number_of_cycles: int=1):
     """
-    Sibling function of `decyclify`, that takes as argument a networkx
-    object.
+    Remove cycle edges from a graph.
 
     :param graph: a networkx object representing the input graph
-    :rtype graph: Union[List, DiGraph]
+    :type graph: Union[List, DiGraph]
+    :param start_node: start node
+    :type start_node: object
     :param number_of_cycles: number of cycles to be generated
     :type number_of_cycles: int
     :return: a DCG that is iterable and contains multiple cycles, each cycle with a single DAG
@@ -53,9 +66,24 @@ def decyclify(graph: Union[List, DiGraph], number_of_cycles: int=1):
     if isinstance(graph, List):
         graph = parse_edgelist(graph, create_using=DiGraph)
 
+    graph = graph.copy()
+
     nodes = graph.nodes
+    # color as vertices white
+    for node in nodes:
+        graph.nodes[node]['color'] = 'white'
+
+    if start_node is None:
+        # TODO: handle empty graph
+        start_node = list(nodes.keys())[0]
+
+    print(*graph.nodes.items())
+    print(graph.edges)
+    _dfs_visit(graph, start_node)
+    print(*graph.nodes.items())
+    print(graph.edges)
+
     number_of_nodes = len(nodes)
-    adjacent_nodes: dict = graph.adj
     cycles: list = list(simple_cycles(graph))
 
     # create matrix filled with -1's
@@ -67,7 +95,7 @@ def decyclify(graph: Union[List, DiGraph], number_of_cycles: int=1):
             # ignore diagonal (same node)
             if i == j:
                 continue
-            node_2_adjacent_nodes = adjacent_nodes.get(node_2)
+            node_2_adjacent_nodes = graph.adj.get(node_2)
             if node_1 in node_2_adjacent_nodes:
                 # here we have two adjacent nodes, they could be either
                 # cyclic or acyclic; the only way to tell which one we
