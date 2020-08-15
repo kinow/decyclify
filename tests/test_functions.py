@@ -89,17 +89,18 @@ def test_print_matrix(capsys):
     g = decyclify_networkx(graph)
     print_matrix(g, graph.nodes)
     out, _ = capsys.readouterr()
-    assert '[-1 -1 -1 -1]' in out
+    assert '[-1 -1 -1 -1]' not in out
+    assert '[0 0 0 0]' not in out # A
 
 
-def test_print_matrix_tabulate(capsys):
+def test_print_intra_matrix_tabulate(capsys):
     graph = nx.DiGraph()
     graph.add_edge('a', 'd')
     graph.add_edge('d', 'b')
     graph.add_edge('d', 'c')
     graph.add_edge('b', 'd')
     graph.add_edge('c', 'a')
-    g = decyclify_networkx(graph)
-    print_matrix(g, graph.nodes, tabulate=True)
+    intra, inter = decyclify_networkx(graph)
+    print_matrix(intra, graph.nodes, tabulate=True)
     out, _ = capsys.readouterr()
-    assert 'a   d   b   c' in out
+    assert 'a d b c' in ' '.join(out.split())

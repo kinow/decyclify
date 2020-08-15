@@ -67,7 +67,7 @@ def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
 
     for i, node_1 in enumerate(nodes):
         for j, node_2 in enumerate(nodes):
-            # ignore same node
+            # ignore diagonal (same node)
             if i == j:
                 continue
             node_2_adjacent_nodes = adjacent_nodes.get(node_2)
