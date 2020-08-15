@@ -86,8 +86,8 @@ def test_print_matrix(capsys):
     graph.add_edge('d', 'c')
     graph.add_edge('b', 'd')
     graph.add_edge('c', 'a')
-    g = decyclify_networkx(graph)
-    print_matrix(g, graph.nodes)
+    intra, inter = decyclify_networkx(graph)
+    print_matrix(intra, graph.nodes)
     out, _ = capsys.readouterr()
     assert '[-1 -1 -1 -1]' not in out
     assert '[0 0 0 0]' not in out # A
