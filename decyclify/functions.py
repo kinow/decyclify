@@ -57,8 +57,21 @@ def decyclify_networkx(graph: DiGraph, number_of_cycles: int=1):
         raise ValueError(f"Number of cycles must be at least '1', but '{number_of_cycles}' given")
     nodes = graph.nodes
     number_of_nodes = len(nodes)
+    adjacent_nodes: dict = graph.adj
 
-    matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), -1)
+    # create matrix filled with -1's
+    matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), 0)
+
+    # TODO: remove back edges
+
+    for i, node_1 in enumerate(nodes):
+        for j, node_2 in enumerate(nodes):
+            # ignore same node
+            if i == j:
+                continue
+            node_2_adjacent_nodes = adjacent_nodes.get(node_2)
+            if node_1 in node_2_adjacent_nodes:
+                matrix_intraiteration.itemset((i, j), 1)
 
     return matrix_intraiteration
 

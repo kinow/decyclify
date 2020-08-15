@@ -25,14 +25,14 @@ from decyclify.functions import *
 
 def test_graph_creation():
     graph = nx.DiGraph()
-    graph.add_edge('a', 'd')
-    graph.add_edge('d', 'b')
-    graph.add_edge('d', 'c')
-    graph.add_edge('b', 'd')
-    graph.add_edge('c', 'a')
+    graph.add_edge('a', 'b')
+    graph.add_edge('b', 'c')
+    graph.add_edge('c', 'b')
+    graph.add_edge('c', 'd')
     print()
     g = decyclify_networkx(graph)
-    print_matrix(g, graph.nodes)
+    print_matrix(g, graph.nodes, True)
+    print(graph.adj)
 
 
 @pytest.mark.parametrize('exc, args', [
