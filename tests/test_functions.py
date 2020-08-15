@@ -31,32 +31,14 @@ def test_graph_creation():
     graph.add_edge('c', 'd')
     # graph.add_edge('d', 'c')
     print()
-    d, c = decyclify(graph)
+
+    graph, cycles_removed = decyclify(graph, 'a')
+
+    d = create_intraiteration_matrix(graph)
     print_matrix(d, graph.nodes, True)
 
-
-@pytest.mark.parametrize('exc, args', [
-    (TypeError, ['string', 1]),
-    (TypeError, [["a b"], 'string']),
-    (TypeError, [None, 1]),
-    (TypeError, [["a b"], None]),
-    (ValueError, [["a b"], 0])
-])
-def test_decyclify_invalid_args(exc, args):
-    with pytest.raises(exc):
-        decyclify(*args)
-
-
-@pytest.mark.parametrize('exc, args', [
-    (TypeError, ['string', 1]),
-    (TypeError, [nx.DiGraph({'a': {'b': {}}}), 'string']),
-    (TypeError, [None, 1]),
-    (TypeError, [nx.DiGraph({'a': {'b': {}}}), None]),
-    (ValueError, [nx.DiGraph({'a': {'b': {}}}), 0])
-])
-def test_decyclify_networkx_invalid_args(exc, args):
-    with pytest.raises(exc):
-        decyclify(*args)
+    c = create_interiteration_matrix(graph.nodes, cycles_removed)
+    print_matrix(c, graph.nodes, True)
 
 
 def test_empty_graph():
@@ -71,7 +53,7 @@ def test_empty_graph():
     (10, ['a b', 'b c', 'c d', 'd e', 'e f', 'f g', 'g h', 'h i', 'i j'])
 ])
 def test_create_matrices_matrix_dimensions(n, graph_string):
-    g = create_matrices(graph_string)
+    g = create_intraiteration_matrix(graph_string)
     assert len(g[0]) == n
     assert len(g[1]) == n
 
@@ -83,7 +65,7 @@ def test_print_matrix(capsys):
     graph.add_edge('d', 'c')
     graph.add_edge('b', 'd')
     graph.add_edge('c', 'a')
-    intra, inter = create_matrices(graph)
+    intra = create_intraiteration_matrix(graph)
     print_matrix(intra, graph.nodes)
     out, _ = capsys.readouterr()
     assert '[-1 -1 -1 -1]' not in out
@@ -97,7 +79,7 @@ def test_print_intra_matrix_tabulate(capsys):
     graph.add_edge('d', 'c')
     graph.add_edge('b', 'd')
     graph.add_edge('c', 'a')
-    intra, inter = create_matrices(graph)
+    intra = create_intraiteration_matrix(graph)
     print_matrix(intra, graph.nodes, tabulate=True)
     out, _ = capsys.readouterr()
     # have only one white space between letters

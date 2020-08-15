@@ -30,20 +30,20 @@ def _cycle_exists(cycles: List, from_node: object, to_node: object):
             return True
     return False
 
-
-def _dfs_visit(graph, node):
+def _dfs_visit(graph, cycles_detected: list, node):
     graph.nodes[node]['color'] = 'gray'
     for vertex in graph.adj.copy().get(node):
         vertex_color = graph.nodes[vertex]['color']
         if vertex_color == 'white':
             # recursive call
-            _dfs_visit(graph, vertex)
+            _dfs_visit(graph, cycles_detected, vertex)
         elif vertex_color == 'gray':
             # remove back link
+            cycles_detected.append((node, vertex))
             graph.remove_edge(node, vertex)
     graph.nodes[node]['color'] = 'black'
 
-def decyclify(graph: Union[List, DiGraph], start_node: object=None, number_of_cycles: int=1):
+def decyclify(graph: Union[List, DiGraph], start_node: object=None):
     """
     Remove cycle edges from a graph.
 
@@ -51,22 +51,21 @@ def decyclify(graph: Union[List, DiGraph], start_node: object=None, number_of_cy
     :type graph: Union[List, DiGraph]
     :param start_node: start node
     :type start_node: object
-    :param number_of_cycles: number of cycles to be generated
-    :type number_of_cycles: int
-    :return: a DCG that is iterable and contains multiple cycles, each cycle with a single DAG
-    :rtype: Tuple[np.ndarray, np.ndarray]
+    :return: a copy of the given graph, but without cycles (i.e. decyclified)
+    :rtype: DiGraph
     """
     if not isinstance(graph, DiGraph) and not isinstance(graph, List):
         raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
-    if not isinstance(number_of_cycles, int):
-        raise TypeError(f"Number of cycles must be an integer, but '{type(number_of_cycles)}' given")
-    if number_of_cycles < 1:
-        raise ValueError(f"Number of cycles must be at least '1', but '{number_of_cycles}' given")
 
     if isinstance(graph, List):
         graph = parse_edgelist(graph, create_using=DiGraph)
 
+    cycles_detected = []
     graph = graph.copy()
+
+    # empty graph
+    if len(graph.nodes) == 0:
+        return graph
 
     nodes = graph.nodes
     # color as vertices white
@@ -74,46 +73,30 @@ def decyclify(graph: Union[List, DiGraph], start_node: object=None, number_of_cy
         graph.nodes[node]['color'] = 'white'
 
     if start_node is None:
-        # TODO: handle empty graph
         start_node = list(nodes.keys())[0]
 
-    print(*graph.nodes.items())
-    print(graph.edges)
-    _dfs_visit(graph, start_node)
-    print(*graph.nodes.items())
-    print(graph.edges)
+    # start
+    _dfs_visit(graph, cycles_detected, start_node)
 
-    number_of_nodes = len(nodes)
-    cycles: list = list(simple_cycles(graph))
+    # remove edges crossing the iteration frontier
+    for edge in graph.edges:
+        source = edge[0]
+        target = edge[1]
+        if graph.nodes[source]['color'] == 'white' and graph.nodes[target]['color'] == 'black':
+            graph.remove_edge(source, target)
 
-    # create matrix filled with -1's
-    matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), 0)
-    matrix_interiteration = np.full((number_of_nodes, number_of_nodes), 0)
+    # check for uncovered vertices
+    for vertex in graph.nodes:
+        if graph.nodes[vertex]['color'] == 'white':
+            _dfs_visit(graph, cycles_detected, vertex)
 
-    for i, node_1 in enumerate(nodes):
-        for j, node_2 in enumerate(nodes):
-            # ignore diagonal (same node)
-            if i == j:
-                continue
-            node_2_adjacent_nodes = graph.adj.get(node_2)
-            if node_1 in node_2_adjacent_nodes:
-                # here we have two adjacent nodes, they could be either
-                # cyclic or acyclic; the only way to tell which one we
-                # have, is by looking at the list of simple cycles
-                #
-                # note that the original paper had its own algorithm
-                # for coloring nodes and removing back-edges, but it
-                # was simpler to use networkx for now
-                if _cycle_exists(cycles, from_node=node_2, to_node=node_1):
-                    # add to matrix C
-                    matrix_interiteration.itemset((i, j), 1)
-                else:
-                    # add to matrix D
-                    matrix_intraiteration.itemset((i, j), 1)
+    return graph, cycles_detected
 
-    return matrix_intraiteration, matrix_interiteration
-
-def create_matrices(graph: Union[DiGraph, List]):
+def create_intraiteration_matrix(graph: Union[DiGraph, List]):
+    """
+    :param graph: a DAG
+    :return:
+    """
     if not isinstance(graph, DiGraph) and not isinstance(graph, List):
         raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
 
@@ -123,11 +106,9 @@ def create_matrices(graph: Union[DiGraph, List]):
     nodes = graph.nodes
     number_of_nodes = len(nodes)
     adjacent_nodes: dict = graph.adj
-    cycles: list = list(simple_cycles(graph))
 
     # create matrix filled with -1's
     matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), 0)
-    matrix_interiteration = np.full((number_of_nodes, number_of_nodes), 0)
 
     for i, node_1 in enumerate(nodes):
         for j, node_2 in enumerate(nodes):
@@ -136,21 +117,32 @@ def create_matrices(graph: Union[DiGraph, List]):
                 continue
             node_2_adjacent_nodes = adjacent_nodes.get(node_2)
             if node_1 in node_2_adjacent_nodes:
-                # here we have two adjacent nodes, they could be either
-                # cyclic or acyclic; the only way to tell which one we
-                # have, is by looking at the list of simple cycles
-                #
-                # note that the original paper had its own algorithm
-                # for coloring nodes and removing back-edges, but it
-                # was simpler to use networkx for now
-                if _cycle_exists(cycles, from_node=node_2, to_node=node_1):
-                    # add to matrix C
-                    matrix_interiteration.itemset((i, j), 1)
-                else:
-                    # add to matrix D
-                    matrix_intraiteration.itemset((i, j), 1)
+                # add to matrix D
+                matrix_intraiteration.itemset((i, j), 1)
 
-    return matrix_intraiteration, matrix_interiteration
+    return matrix_intraiteration
+
+def create_interiteration_matrix(nodes, cycles):
+    if not cycles:
+        return np.empty([])
+
+    number_of_nodes = len(nodes)
+
+    # create matrix filled with -1's
+    matrix_interiteration = np.full((number_of_nodes, number_of_nodes), 0)
+
+    nodes_indices_in_matrix = {
+        node: index for index, node in enumerate(nodes)
+    }
+
+    for cycle in cycles:
+        source = cycle[0]
+        target = cycle[1]
+        source_index = nodes_indices_in_matrix.get(source)
+        target_index = nodes_indices_in_matrix.get(target)
+        matrix_interiteration.itemset((target_index, source_index), 1)
+
+    return matrix_interiteration
 
 def print_matrix(matrix: np.ndarray, nodes: Iterable, tabulate: bool = False) -> None:
     """
