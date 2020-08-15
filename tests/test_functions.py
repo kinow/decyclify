@@ -29,10 +29,13 @@ def test_graph_creation():
     graph.add_edge('b', 'c')
     graph.add_edge('c', 'b')
     graph.add_edge('c', 'd')
+    # graph.add_edge('d', 'c')
     print()
-    g = decyclify_networkx(graph)
-    print_matrix(g, graph.nodes, True)
+    d, c = decyclify_networkx(graph)
+    print_matrix(d, graph.nodes, True)
+    print_matrix(c, graph.nodes, True)
     print(graph.adj)
+    print(list(nx.algorithms.simple_cycles(graph)))
 
 
 @pytest.mark.parametrize('exc, args', [
