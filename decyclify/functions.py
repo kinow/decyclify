@@ -21,18 +21,18 @@ from networkx.readwrite.edgelist import parse_edgelist
 from tabulate import tabulate as tabulate_fn
 
 
-def _dfs_visit(graph, cycles_detected: list, node):
-    graph.nodes[node]['color'] = 'gray'
-    for vertex in graph.adj.copy().get(node):
+def _dfs_visit(graph, cycles_detected: list, start_node):
+    graph.nodes[start_node]['color'] = 'gray'
+    for vertex in graph.adj.copy().get(start_node):
         vertex_color = graph.nodes[vertex]['color']
         if vertex_color == 'white':
             # recursive call
             _dfs_visit(graph, cycles_detected, vertex)
         elif vertex_color == 'gray':
             # remove back link
-            cycles_detected.append((node, vertex))
-            graph.remove_edge(node, vertex)
-    graph.nodes[node]['color'] = 'black'
+            cycles_detected.append((start_node, vertex))
+            graph.remove_edge(start_node, vertex)
+    graph.nodes[start_node]['color'] = 'black'
 
 def decyclify(graph: Union[List, DiGraph], start_node: object=None):
     """
