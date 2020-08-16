@@ -165,3 +165,10 @@ def print_matrix(matrix: np.ndarray, nodes: Iterable, tabulate: bool = False) ->
         print(tabulate_fn(matrix_copy))
     else:
         print(matrix)
+
+__all__ = [
+    'decyclify',
+    'create_intraiteration_matrix',
+    'create_interiteration_matrix',
+    'print_matrix'
+]

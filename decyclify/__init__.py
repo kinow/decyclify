@@ -11,7 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-__all__ = ['__version__']
+from functions import *
 
 __version__ = '0.1.dev0'
+
+__all__ = [
+    '__version__',
+    'decyclify',
+    'create_interiteration_matrix',
+    'create_intraiteration_matrix',
+    'print_matrix'
+]
