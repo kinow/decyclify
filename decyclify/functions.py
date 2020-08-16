@@ -13,11 +13,10 @@
 # limitations under the License.
 
 from collections import Iterable
-from typing import List, Tuple, Union
+from typing import List, Union
 
 import numpy as np
 from networkx import DiGraph
-from networkx.algorithms.cycles import simple_cycles
 from networkx.readwrite.edgelist import parse_edgelist
 from tabulate import tabulate as tabulate_fn
 
