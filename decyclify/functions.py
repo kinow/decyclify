@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from collections import Iterable
-from typing import List, Union
+from typing import List, Union, Tuple
 
 import numpy as np
 from networkx import DiGraph
@@ -21,7 +21,30 @@ from networkx.readwrite.edgelist import parse_edgelist
 from tabulate import tabulate as tabulate_fn
 
 
-def _dfs_visit(graph, cycles_detected: list, start_node):
+def _dfs_visit(graph, cycles_detected: List[Tuple[str, str]], start_node: str) -> None:
+    """
+    DFS-Visit as implemented in the paper. Some extra parameters are passed here to use convenient functions from
+    networkx.
+
+    Will start visiting the ``start_node``, changing its color from 'white' to 'gray'.
+
+    Then will iterate over the ``start_node`` adjacent nodes. For each node, if its color is
+    'white', it recurse passing the new node as ``start_node``.
+
+    Otherwise, if the node in the iteration is `gray`, it means that the node has already been
+    visited, then we must have a back link from ``start_node`` to the new node.
+
+    Back links are removed, removing any cycles, so the graph is decyclified.
+
+    The final step is to change the color of each node visited to 'black', indicating the end of the function.
+
+    :param graph: a directed cyclic or acyclic graph
+    :type graph: DiGraph
+    :param cycles_detected: initially empty list, populated by this function with each back edge removed
+    :type cycles_detected: List[Tuple[str, str]]
+    :param start_node: start node
+    :type start_node: str
+    """
     graph.nodes[start_node]['color'] = 'gray'
     for vertex in graph.adj.copy().get(start_node):
         vertex_color = graph.nodes[vertex]['color']
