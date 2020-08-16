@@ -72,7 +72,7 @@ def decyclify(graph: Union[List, DiGraph], start_node: object=None):
         raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
 
     if isinstance(graph, List):
-        graph = parse_edgelist(graph, create_using=DiGraph)
+        graph: DiGraph = parse_edgelist(graph, create_using=DiGraph)
 
     cycles_detected = []
     graph = graph.copy()
