@@ -21,14 +21,6 @@ from networkx.readwrite.edgelist import parse_edgelist
 from tabulate import tabulate as tabulate_fn
 
 
-def _cycle_exists(cycles: List, from_node: object, to_node: object):
-    for cycle in cycles:
-        # is the to_node at the end of the cycle (target)?, and,
-        # is the other node one of the source nodes?
-        if cycles[-1] == to_node and from_node in cycle:
-            return True
-    return False
-
 def _dfs_visit(graph, cycles_detected: list, node):
     graph.nodes[node]['color'] = 'gray'
     for vertex in graph.adj.copy().get(node):
