@@ -21,7 +21,7 @@ import networkx as nx
 import pytest
 
 from decyclify.functions import *
-from collections import Iterable
+from collections.abc import Iterable
 
 
 def test_graph_creation():
