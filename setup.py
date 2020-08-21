@@ -22,7 +22,7 @@ import re, io
 __version__ = re.search(
     r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
     io.open('decyclify/__init__.py', encoding='utf_8_sig').read(),
-    re.MULTILINE)[0]
+    re.MULTILINE)[1]
 
 
 install_requires = [
