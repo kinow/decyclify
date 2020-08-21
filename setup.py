@@ -16,7 +16,14 @@
 
 from setuptools import setup, find_packages
 
-from decyclify import __version__ as version
+import re, io
+
+# https://stackoverflow.com/questions/17583443/what-is-the-correct-way-to-share-package-version-with-setup-py-and-the-package
+__version__ = re.search(
+    r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+    io.open('decyclify/__init__.py', encoding='utf_8_sig').read(),
+    re.MULTILINE)[0]
+
 
 install_requires = [
     'networkx==2.4.*',
@@ -45,7 +52,7 @@ extras_require['all'] = (
 setup(
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
-    version=version,
+    version=__version__,
     packages=find_packages(include=["decyclify.*"]),
     install_requires=install_requires,
     tests_require=tests_require,
