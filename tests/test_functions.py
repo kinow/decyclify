@@ -47,6 +47,11 @@ def test_empty_graph():
     assert isinstance(g, Iterable)
 
 
+def test_invalid_type_decyclify():
+    with pytest.raises(TypeError):
+        decyclify(10)
+
+
 @pytest.mark.parametrize('n, graph_string', [
     (2, ['a b']),
     (3, ['a b', 'b c']),
