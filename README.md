@@ -1,6 +1,7 @@
 # decyclify
 
 ![CI](https://github.com/kinow/decyclify/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/kinow/decyclify/branch/master/graph/badge.svg)](https://codecov.io/gh/kinow/decyclify)
 
 Graph decyclify algorithm implementation as in Sandnes &amp; Sinnen paper (2004) in Python.
 
