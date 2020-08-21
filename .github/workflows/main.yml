@@ -28,4 +28,10 @@ jobs:
 
     - name: Unit Tests
       run: |
-        pytest
+        pytest --cov-report=xml
+
+    - name: Unit Tests Coverage
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
