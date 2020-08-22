@@ -53,6 +53,30 @@ def test_invalid_type_decyclify():
         # noinspection PyTypeChecker
         decyclify(10)
 
+def test_decyclify_dag():
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'b')
+    graph.add_edge('b', 'c')
+    graph, cycles = decyclify(graph)
+    # no cycles as this is a dag
+    assert len(cycles) == 0
+    # list of nodes returned
+    assert ['a', 'b', 'c'] == [x for x in graph.nodes.keys()]
+    # all nodes visited
+    assert {'black'} == set([x['color'] for x in graph.nodes.values()])
+
+def test_decyclify_dag_starting_node():
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'b')
+    graph.add_edge('b', 'c')
+    graph, cycles = decyclify(graph, 'b')
+    # no cycles as this is a dag
+    assert len(cycles) == 0
+    # list of nodes returned
+    assert ['a', 'b', 'c'] == [x for x in graph.nodes.keys()]
+    # all nodes visited
+    assert {'black'} == set([x['color'] for x in graph.nodes.values()])
+
 # --- intraiteration
 
 def test_create_intraiteration_matrix_type_error():

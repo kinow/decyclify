@@ -93,7 +93,7 @@ def decyclify(graph: Union[List, DiGraph], start_node: object=None):
     _dfs_visit(graph, cycles_detected, start_node)
 
     # remove edges crossing the iteration frontier
-    for edge in graph.edges:
+    for edge in [edge for edge in graph.edges]:
         source = edge[0]
         target = edge[1]
         if graph.nodes[source]['color'] == 'white' and graph.nodes[target]['color'] == 'black':
