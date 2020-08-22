@@ -156,7 +156,7 @@ def create_intraiteration_matrix(graph: Union[DiGraph, List]):
 
     adjacent_nodes: dict = graph.adj
 
-    # create matrix filled with -1's
+    # create matrix filled with 0's
     matrix_intraiteration = np.full((number_of_nodes, number_of_nodes), 0)
 
     for i, node_1 in enumerate(nodes):
@@ -177,7 +177,7 @@ def create_interiteration_matrix(nodes, cycles):
 
     number_of_nodes = len(nodes)
 
-    # create matrix filled with -1's
+    # create matrix filled with 0's
     matrix_interiteration = np.full((number_of_nodes, number_of_nodes), 0)
 
     nodes_indices_in_matrix = {
