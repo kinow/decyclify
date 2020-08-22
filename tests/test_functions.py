@@ -55,6 +55,15 @@ def test_invalid_type_decyclify():
 
 # --- intraiteration
 
+def test_create_intraiteration_matrix_type_error():
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        create_intraiteration_matrix(10)
+
+def test_create_intraiteration_matrix_empty():
+    matrix = create_intraiteration_matrix([])
+    assert len(matrix) == 0
+
 @pytest.mark.parametrize('n, graph_string', [
     (2, ['a b']),
     (3, ['a b', 'b c']),
