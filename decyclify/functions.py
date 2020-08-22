@@ -140,7 +140,7 @@ def create_intraiteration_matrix(graph: Union[DiGraph, List]):
     :param graph: a DAG
     :type graph: Union[List, DiGraph]
     :return: intraiteration matrix
-    :rtype: List[List]
+    :rtype: np.ndarray
     """
     if not isinstance(graph, DiGraph) and not isinstance(graph, List):
         raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
@@ -204,7 +204,7 @@ def create_interiteration_matrix(nodes, cycles):
     :param cycles: a list containing tuples of back edges in a graph, that create cycles in the graph
     :type cycles: List[Tuple[str, str]]
     :return: interiteration matrix
-    :rtype: List[List]
+    :rtype: np.ndarray
     """
     if not cycles:
         return np.empty([])

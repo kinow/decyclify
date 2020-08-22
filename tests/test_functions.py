@@ -41,6 +41,7 @@ def test_graph_creation():
     c = create_interiteration_matrix(graph.nodes, cycles_removed)
     print_matrix(c, graph.nodes, True)
 
+# --- decyclify
 
 def test_empty_graph():
     g = decyclify([])
@@ -49,8 +50,10 @@ def test_empty_graph():
 
 def test_invalid_type_decyclify():
     with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
         decyclify(10)
 
+# --- intraiteration
 
 @pytest.mark.parametrize('n, graph_string', [
     (2, ['a b']),
@@ -91,3 +94,5 @@ def test_print_intra_matrix_tabulate(capsys):
     # have only one white space between letters
     out = ' '.join(out.split())
     assert '' in out
+
+# --- interiteration
