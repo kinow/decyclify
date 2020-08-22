@@ -177,6 +177,9 @@ def create_interiteration_matrix(nodes, cycles):
 
     number_of_nodes = len(nodes)
 
+    if number_of_nodes == 0:
+        return np.empty([])
+
     # create matrix filled with 0's
     matrix_interiteration = np.full((number_of_nodes, number_of_nodes), 0)
 
