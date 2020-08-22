@@ -108,17 +108,52 @@ def decyclify(graph: Union[List, DiGraph], start_node: object=None):
 
 def create_intraiteration_matrix(graph: Union[DiGraph, List]):
     """
+    Create the intraiteration matrix for a given direct acyclic graph.
+
+    The graph must not contain cycles. Returns a matrix where the columns
+    and rows represent nodes in the graph.
+
+    Each column and row pair represents an edge in the graph.
+
+    Example matrix:
+
+              a  b  c  d
+           a  0  0  0  0
+           b  1  0  0  0
+           c  0  1  0  0
+           d  0  0  1  0
+
+    Iterating the matrix by row and column, for each pair, an edge exists
+    when the value of the entry in the matrix is 1.
+
+    If the value is 1, then we read it as 'b' is triggered by 'a',
+    or 'b' depends on 'a'.
+
+    In the matrix above, the edge(row='c', column='b') is 0, meaning
+    that there is no dependency between both nodes.
+
+    edge(row='b', column='a'), on the other hand, shows that 'b' is triggered
+    after 'a', or that 'b' depends of 'a'.
+
+    In the graph 'a' would have a directed edge to 'b'.
+
     :param graph: a DAG
-    :return:
+    :type graph: Union[List, DiGraph]
+    :return: intraiteration matrix
+    :rtype: List[List]
     """
     if not isinstance(graph, DiGraph) and not isinstance(graph, List):
         raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
 
     if isinstance(graph, List):
-        graph = parse_edgelist(graph, create_using=DiGraph)
+        graph: DiGraph = parse_edgelist(graph, create_using=DiGraph)
 
     nodes = graph.nodes
     number_of_nodes = len(nodes)
+
+    if number_of_nodes == 0:
+        return np.empty([])
+
     adjacent_nodes: dict = graph.adj
 
     # create matrix filled with -1's
