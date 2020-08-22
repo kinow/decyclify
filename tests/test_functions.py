@@ -96,3 +96,20 @@ def test_print_intra_matrix_tabulate(capsys):
     assert '' in out
 
 # --- interiteration
+
+def test_create_interiteration_matrix_type_error():
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        create_interiteration_matrix(10, [])
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        create_interiteration_matrix([], 10)
+
+def test_create_interiteration_matrix_empty_cycles():
+    matrix = create_interiteration_matrix(['a', 'b'], [])
+    assert len(matrix) == 0
+
+def test_create_interiteration_matrix_empty_nodes():
+    matrix = create_interiteration_matrix([], [('b', 'a')])
+    assert len(matrix) == 0
+

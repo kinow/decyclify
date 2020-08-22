@@ -140,7 +140,7 @@ def create_intraiteration_matrix(graph: Union[DiGraph, List]):
     :param graph: a DAG
     :type graph: Union[List, DiGraph]
     :return: intraiteration matrix
-    :rtype: np.ndarray
+    :rtype: list
     """
     if not isinstance(graph, DiGraph) and not isinstance(graph, List):
         raise TypeError(f"Graph must be a List or a networkx.DiGraph, but '{type(graph)}' given")
@@ -152,7 +152,7 @@ def create_intraiteration_matrix(graph: Union[DiGraph, List]):
     number_of_nodes = len(nodes)
 
     if number_of_nodes == 0:
-        return np.empty([])
+        return []
 
     adjacent_nodes: dict = graph.adj
 
@@ -169,9 +169,9 @@ def create_intraiteration_matrix(graph: Union[DiGraph, List]):
                 # add to matrix D
                 matrix_intraiteration.itemset((i, j), 1)
 
-    return matrix_intraiteration
+    return matrix_intraiteration.tolist()
 
-def create_interiteration_matrix(nodes, cycles):
+def create_interiteration_matrix(nodes: list, cycles: list):
     """
     Creates the interiteration matrix for a given list of nodes of a graph,
     and the cycles that were removed/found in the graph.
@@ -206,13 +206,19 @@ def create_interiteration_matrix(nodes, cycles):
     :return: interiteration matrix
     :rtype: np.ndarray
     """
+    if not isinstance(nodes, Iterable):
+        raise TypeError(f"List of nodes must be an Iterable, but '{type(nodes)}' given")
+
+    if not isinstance(cycles, Iterable):
+        raise TypeError(f"List of cycles must be an Iterable, but '{type(cycles)}' given")
+
     if not cycles:
-        return np.empty([])
+        return []
 
     number_of_nodes = len(nodes)
 
     if number_of_nodes == 0:
-        return np.empty([])
+        return []
 
     # create matrix filled with 0's
     matrix_interiteration = np.full((number_of_nodes, number_of_nodes), 0)
@@ -228,7 +234,7 @@ def create_interiteration_matrix(nodes, cycles):
         target_index = nodes_indices_in_matrix.get(target)
         matrix_interiteration.itemset((target_index, source_index), 1)
 
-    return matrix_interiteration
+    return matrix_interiteration.tolist()
 
 def print_matrix(matrix: np.ndarray, nodes: Iterable, tabulate: bool = False) -> None:
     """
