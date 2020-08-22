@@ -108,7 +108,7 @@ def decyclify(graph: Union[List, DiGraph], start_node: object=None):
 
 def create_intraiteration_matrix(graph: Union[DiGraph, List]):
     """
-    Create the intraiteration matrix for a given direct acyclic graph.
+    Creates the intraiteration matrix for a given direct acyclic graph.
 
     The graph must not contain cycles. Returns a matrix where the columns
     and rows represent nodes in the graph.
@@ -172,6 +172,40 @@ def create_intraiteration_matrix(graph: Union[DiGraph, List]):
     return matrix_intraiteration
 
 def create_interiteration_matrix(nodes, cycles):
+    """
+    Creates the interiteration matrix for a given list of nodes of a graph,
+    and the cycles that were removed/found in the graph.
+
+    Returns a matrix where the columns and rows represent nodes in the graph.
+
+    The columns represent nodes in one cycle/iteration of the graph, and the
+    rows represent the same nodes in another cycle/iteration of the same graph.
+
+    Example matrix:
+
+              a  b  c  d
+           a  0  0  0  0
+           b  0  0  1  0
+           c  0  0  0  0
+           d  0  0  0  0
+
+    In the example matrix above, the element at (row='b', column='c')
+    is the only element that is not 0.
+
+    When the value of an element in the matrix is 1, it means that the
+    node at the column created a cycle to the node at the row.
+
+    Or in the example above, we can say that in the graph used,
+    'c' triggers 'b' in a different iteration. There is a cycle
+    from 'b' to 'c', and also back-edge from 'c' to 'b'.
+
+    :param nodes: list of nodes
+    :type nodes: List
+    :param cycles: a list containing tuples of back edges in a graph, that create cycles in the graph
+    :type cycles: List[Tuple[str, str]]
+    :return: interiteration matrix
+    :rtype: List[List]
+    """
     if not cycles:
         return np.empty([])
 
