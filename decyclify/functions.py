@@ -204,7 +204,7 @@ def create_interiteration_matrix(nodes: list, cycles: list):
     :param cycles: a list containing tuples of back edges in a graph, that create cycles in the graph
     :type cycles: List[Tuple[str, str]]
     :return: interiteration matrix
-    :rtype: np.ndarray
+    :rtype: list
     """
     if not isinstance(nodes, Iterable):
         raise TypeError(f"List of nodes must be an Iterable, but '{type(nodes)}' given")
@@ -236,7 +236,7 @@ def create_interiteration_matrix(nodes: list, cycles: list):
 
     return matrix_interiteration.tolist()
 
-def print_matrix(matrix: np.ndarray, nodes: Iterable, tabulate: bool = False) -> None:
+def print_matrix(matrix: list, nodes: Iterable, tabulate: bool = False) -> None:
     """
     Print the matrix tabulated.
     :param matrix:
