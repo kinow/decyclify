@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Implementation of functions to decyclify graphs, based on the
+paper 'A new strategy for multiprocessor scheduling of cyclic task graphs'
+by Sandnes and Sinnen paper (2004)."""
+
 from collections.abc import Iterable
 from typing import List, Union, Tuple
 
