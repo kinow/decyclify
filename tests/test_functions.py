@@ -126,6 +126,24 @@ def test_create_interiteration_matrix_empty_nodes():
     matrix = create_interiteration_matrix([], [('b', 'a')])
     assert len(matrix) == 0
 
+def test_create_interiteration_matrix():
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'b')
+    graph.add_edge('b', 'c')
+    graph.add_edge('c', 'b')
+    graph.add_edge('c', 'd')
+
+    graph, cycles_removed = decyclify(graph)
+
+    c = create_interiteration_matrix(graph.nodes, cycles_removed)
+    expected: list = [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
+    assert expected == c
+
 # --- print_matrix
 
 def test_print_matrix(capsys):
