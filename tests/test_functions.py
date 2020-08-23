@@ -108,6 +108,24 @@ def test_create_matrices_matrix_dimensions(n, graph_string):
     assert len(g[0]) == n
     assert len(g[1]) == n
 
+def test_create_intraiteration_matrix():
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'b')
+    graph.add_edge('b', 'c')
+    graph.add_edge('c', 'b')
+    graph.add_edge('c', 'd')
+
+    graph, cycles_removed = decyclify(graph)
+
+    c = create_intraiteration_matrix(graph)
+    expected: list = [
+        [0, 0, 0, 0],
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0]
+    ]
+    assert expected == c
+
 # --- interiteration
 
 def test_create_interiteration_matrix_type_error():
