@@ -47,7 +47,6 @@ def test_empty_graph():
     g = decyclify([])
     assert isinstance(g, Iterable)
 
-
 def test_invalid_type_decyclify():
     with pytest.raises(TypeError):
         # noinspection PyTypeChecker
@@ -77,6 +76,16 @@ def test_decyclify_dag_starting_node():
     # all nodes visited
     assert {'black'} == set([x['color'] for x in graph.nodes.values()])
 
+def test_decyclify():
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'b')
+    graph.add_edge('b', 'c')
+    graph.add_edge('c', 'b')
+    graph.add_edge('c', 'd')
+    graph, cycles_removed = decyclify(graph, 'a')
+    assert ['a', 'b', 'c', 'd'] == [x for x in graph.nodes]
+    assert [('c', 'b')] == cycles_removed
+
 # --- intraiteration
 
 def test_create_intraiteration_matrix_type_error():
@@ -99,7 +108,6 @@ def test_create_matrices_matrix_dimensions(n, graph_string):
     assert len(g[0]) == n
     assert len(g[1]) == n
 
-
 def test_print_matrix(capsys):
     graph = nx.DiGraph()
     graph.add_edge('a', 'd')
@@ -112,7 +120,6 @@ def test_print_matrix(capsys):
     out, _ = capsys.readouterr()
     assert '[-1 -1 -1 -1]' not in out
     assert '[0 0 0 0]' not in out # A
-
 
 def test_print_intra_matrix_tabulate(capsys):
     graph = nx.DiGraph()
