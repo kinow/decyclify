@@ -108,6 +108,26 @@ def test_create_matrices_matrix_dimensions(n, graph_string):
     assert len(g[0]) == n
     assert len(g[1]) == n
 
+# --- interiteration
+
+def test_create_interiteration_matrix_type_error():
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        create_interiteration_matrix(10, [])
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        create_interiteration_matrix([], 10)
+
+def test_create_interiteration_matrix_empty_cycles():
+    matrix = create_interiteration_matrix(['a', 'b'], [])
+    assert len(matrix) == 0
+
+def test_create_interiteration_matrix_empty_nodes():
+    matrix = create_interiteration_matrix([], [('b', 'a')])
+    assert len(matrix) == 0
+
+# --- print_matrix
+
 def test_print_matrix(capsys):
     graph = nx.DiGraph()
     graph.add_edge('a', 'd')
@@ -134,22 +154,3 @@ def test_print_intra_matrix_tabulate(capsys):
     # have only one white space between letters
     out = ' '.join(out.split())
     assert '' in out
-
-# --- interiteration
-
-def test_create_interiteration_matrix_type_error():
-    with pytest.raises(TypeError):
-        # noinspection PyTypeChecker
-        create_interiteration_matrix(10, [])
-    with pytest.raises(TypeError):
-        # noinspection PyTypeChecker
-        create_interiteration_matrix([], 10)
-
-def test_create_interiteration_matrix_empty_cycles():
-    matrix = create_interiteration_matrix(['a', 'b'], [])
-    assert len(matrix) == 0
-
-def test_create_interiteration_matrix_empty_nodes():
-    matrix = create_interiteration_matrix([], [('b', 'a')])
-    assert len(matrix) == 0
-
