@@ -15,4 +15,48 @@
 """Function to iterate graph nodes. Implements functions that can be
 used to implement the experiments of the Sandnes and Sinnen paper."""
 
+from decyclify.functions import create_intraiteration_matrix
+from networkx import DiGraph
+import numpy as np
 
+
+class CycleIterator:
+    """An iterator that will iterate over all the nodes in a cycle,
+    before moving to the next cycles."""
+
+    def __init__(self, graph: DiGraph):
+        if not isinstance(graph, DiGraph):
+            raise ValueError('graph must be a non-empty DiGraph')
+        self.graph = graph
+        self.intraiteration_matrix = create_intraiteration_matrix(graph)
+        self.matrix = np.array(self.intraiteration_matrix, copy=True)
+        self.current_cycle = 0
+        self.current_column = -1
+        self.nodes = [node for node in self.graph.nodes]
+        self.count_nodes = len(self.nodes)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        # if we
+        if self.current_column == self.count_nodes - 1:
+            self.current_cycle += 1
+            self.current_column = -1
+        nodes = []
+        if self.current_column == -1:
+            node = self.nodes[self.current_column + 1]
+            nodes.append(f'{node}.{self.current_cycle}')
+        else:
+            while True:
+                empty_column = True
+                for row_index in range(0, self.count_nodes):
+                    if self.matrix[row_index, self.current_column] == 1:
+                        node = self.nodes[row_index]
+                        nodes.append(f'{node}.{self.current_cycle}')
+                        empty_column = False
+                if not empty_column:
+                    break
+                self.current_column += 1
+        self.current_column += 1
+        return nodes
