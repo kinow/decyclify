@@ -17,11 +17,12 @@
 Tests for `decyclify.functions`.
 """
 
+from collections.abc import Iterable
+
 import networkx as nx
 import pytest
 
 from decyclify.functions import *
-from collections.abc import Iterable
 
 
 def test_graph_creation():

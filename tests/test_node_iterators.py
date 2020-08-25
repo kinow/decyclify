@@ -15,11 +15,17 @@
 
 """Tests for the node_iterators."""
 
+import pytest
 from networkx import nx
 
 from decyclify.functions import *
 from decyclify.node_iterators import *
 
+
+def test_cycle_iterator_type_error():
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        CycleIterator(10)
 
 def test_cycle_iterators():
     graph = nx.DiGraph()

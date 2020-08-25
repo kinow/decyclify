@@ -26,7 +26,7 @@ class CycleIterator:
 
     def __init__(self, graph: DiGraph):
         if not isinstance(graph, DiGraph):
-            raise ValueError('graph must be a non-empty DiGraph')
+            raise TypeError('graph must be a non-empty DiGraph')
         self.graph = graph
         self.intraiteration_matrix = create_intraiteration_matrix(graph)
         self.matrix = np.array(self.intraiteration_matrix, copy=True)
