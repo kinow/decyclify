@@ -39,11 +39,13 @@ class CycleIterator:
         return self
 
     def __next__(self):
-        # if we
+        # if we have completed a cycle, we must reset the indexes
         if self.current_column == self.count_nodes - 1:
             self.current_cycle += 1
             self.current_column = -1
         nodes = []
+        # if this is the first column, we know this task won't have any
+        # dependency
         if self.current_column == -1:
             node = self.nodes[self.current_column + 1]
             nodes.append(f'{node}.{self.current_cycle}')
