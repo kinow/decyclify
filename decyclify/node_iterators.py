@@ -15,7 +15,7 @@
 """Function to iterate graph nodes. Implements functions that can be
 used to implement the experiments of the Sandnes and Sinnen paper."""
 
-from decyclify.functions import create_intraiteration_matrix
+from decyclify.functions import create_intraiteration_matrix, create_interiteration_matrix, decyclify
 from networkx import DiGraph
 import numpy as np
 
@@ -60,3 +60,29 @@ class CycleIterator:
                 self.current_column += 1
         self.current_column += 1
         return nodes
+
+
+class TasksIterator:
+    """An iterator that will iterate over all the nodes in a cycle,
+    starting a new cycle as soon as a task has a interiteration
+    dependency (IOW, if a task c.1 has a back-edge to a.2, once
+    c.1 is found, it will start the cycle 2 and iterate over a.2,
+    even if the cycle 1 is still being processed."""
+
+    def __init__(self, graph: DiGraph):
+        if not isinstance(graph, DiGraph):
+            raise TypeError('graph must be a non-empty DiGraph')
+        graph, cycles_removed = decyclify(graph)
+        self.graph = graph
+        self.cycles_removed = cycles_removed
+
+        self.intraiteration_matrix = create_intraiteration_matrix(graph)
+
+        self.interiteration_matrix = create_interiteration_matrix(graph.nodes, cycles_removed)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        # WIP
+        raise StopIteration
