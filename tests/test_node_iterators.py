@@ -18,8 +18,8 @@
 import pytest
 from networkx import nx
 
-from decyclify.functions import *
-from decyclify.node_iterators import *
+from decyclify.functions import decyclify
+from decyclify.node_iterators import CycleIterator, TasksIterator
 
 
 def test_cycle_iterator_type_error():
@@ -46,5 +46,24 @@ def test_cycle_iterators():
         iterated.append(node)
         if index == 7:
             break
+
+    assert iterated == expected
+
+def test_tasks_iterator():
+    graph = nx.DiGraph()
+    graph.add_edge('a', 'b')
+    graph.add_edge('a', 'e')
+    graph.add_edge('b', 'c')
+    graph.add_edge('c', 'b')
+    graph.add_edge('c', 'd')
+
+    graph, cycles_removed = decyclify(graph, 'a')
+
+    iterator = TasksIterator(graph)
+
+    expected = []
+    iterated = []
+
+    # TODO: use iterator
 
     assert iterated == expected
