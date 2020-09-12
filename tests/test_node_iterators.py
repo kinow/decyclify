@@ -16,7 +16,6 @@
 """Tests for the node_iterators."""
 
 import pytest
-from networkx import nx
 
 from decyclify.functions import decyclify
 from decyclify.node_iterators import CycleIterator, TasksIterator
@@ -27,15 +26,8 @@ def test_cycle_iterator_type_error():
         # noinspection PyTypeChecker
         CycleIterator(10)
 
-def test_cycle_iterators():
-    graph = nx.DiGraph()
-    graph.add_edge('a', 'b')
-    graph.add_edge('a', 'e')
-    graph.add_edge('b', 'c')
-    graph.add_edge('c', 'b')
-    graph.add_edge('c', 'd')
-
-    graph, cycles_removed = decyclify(graph, 'a')
+def test_cycle_iterators(sample_graph):
+    graph, cycles_removed = decyclify(sample_graph, 'a')
 
     iterator = CycleIterator(graph)
 
@@ -49,15 +41,8 @@ def test_cycle_iterators():
 
     assert iterated == expected
 
-def test_tasks_iterator():
-    graph = nx.DiGraph()
-    graph.add_edge('a', 'b')
-    graph.add_edge('a', 'e')
-    graph.add_edge('b', 'c')
-    graph.add_edge('c', 'b')
-    graph.add_edge('c', 'd')
-
-    graph, cycles_removed = decyclify(graph, 'a')
+def test_tasks_iterator(sample_graph):
+    graph, cycles_removed = decyclify(sample_graph, 'a')
 
     iterator = TasksIterator(graph)
 
