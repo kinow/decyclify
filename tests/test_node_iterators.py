@@ -20,11 +20,18 @@ import pytest
 from decyclify.functions import decyclify
 from decyclify.node_iterators import CycleIterator, TasksIterator
 
+from networkx import DiGraph
 
-def test_cycle_iterator_type_error():
-    with pytest.raises(TypeError):
+
+@pytest.mark.parametrize('graph,cycles,error', [
+    (DiGraph(), None, TypeError),
+    (10, 1, TypeError),
+    (DiGraph(), -1, ValueError)
+])
+def test_cycle_iterator_validation_error(graph, cycles, error):
+    with pytest.raises(error):
         # noinspection PyTypeChecker
-        CycleIterator(10)
+        CycleIterator(graph, cycles)
 
 def test_cycle_iterators(sample_graph):
     graph, cycles_removed = decyclify(sample_graph, 'a')
@@ -40,6 +47,16 @@ def test_cycle_iterators(sample_graph):
             pytest.fail('iterator iterations exceeded length of expected values!')
 
     assert iterated == expected
+
+@pytest.mark.parametrize('graph,cycles,error', [
+    (DiGraph(), None, TypeError),
+    (10, 1, TypeError),
+    (DiGraph(), -1, ValueError)
+])
+def test_tasks_iterator_validation_error(graph, cycles, error):
+    with pytest.raises(error):
+        # noinspection PyTypeChecker
+        TasksIterator(graph, cycles)
 
 def test_tasks_iterator(sample_graph):
     graph, cycles_removed = decyclify(sample_graph, 'a')

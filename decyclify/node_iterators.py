@@ -27,6 +27,10 @@ class CycleIterator:
     def __init__(self, graph: DiGraph, cycles=2):
         if not isinstance(graph, DiGraph):
             raise TypeError('graph must be a non-empty DiGraph')
+        if not isinstance(cycles, int):
+            raise TypeError('cycles must be an integer')
+        if cycles <= 0:
+            raise ValueError('cycles value must be greater than zero')
         self.graph = graph
         self.cycles = cycles
         self.intraiteration_matrix = create_intraiteration_matrix(graph)
@@ -75,6 +79,10 @@ class TasksIterator:
     def __init__(self, graph: DiGraph, cycles=2):
         if not isinstance(graph, DiGraph):
             raise TypeError('graph must be a non-empty DiGraph')
+        if not isinstance(cycles, int):
+            raise TypeError('cycles must be an integer')
+        if cycles <= 0:
+            raise ValueError('cycles value must be greater than zero')
         graph, cycles_removed = decyclify(graph)
         self.graph = graph
         self.cycles = cycles
