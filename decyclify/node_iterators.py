@@ -24,10 +24,11 @@ class CycleIterator:
     """An iterator that will iterate over all the nodes in a cycle,
     before moving to the next cycles."""
 
-    def __init__(self, graph: DiGraph):
+    def __init__(self, graph: DiGraph, cycles=2):
         if not isinstance(graph, DiGraph):
             raise TypeError('graph must be a non-empty DiGraph')
         self.graph = graph
+        self.cycles = cycles
         self.intraiteration_matrix = create_intraiteration_matrix(graph)
         self.matrix = np.array(self.intraiteration_matrix, copy=True)
         self.current_cycle = 0
@@ -71,11 +72,12 @@ class TasksIterator:
     c.1 is found, it will start the cycle 2 and iterate over a.2,
     even if the cycle 1 is still being processed."""
 
-    def __init__(self, graph: DiGraph):
+    def __init__(self, graph: DiGraph, cycles=2):
         if not isinstance(graph, DiGraph):
             raise TypeError('graph must be a non-empty DiGraph')
         graph, cycles_removed = decyclify(graph)
         self.graph = graph
+        self.cycles = cycles
         self.cycles_removed = cycles_removed
 
         self.intraiteration_matrix = create_intraiteration_matrix(graph)

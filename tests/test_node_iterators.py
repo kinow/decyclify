@@ -29,30 +29,30 @@ def test_cycle_iterator_type_error():
 def test_cycle_iterators(sample_graph):
     graph, cycles_removed = decyclify(sample_graph, 'a')
 
-    iterator = CycleIterator(graph)
+    iterator = CycleIterator(graph, cycles=2)
 
     expected = [['a.0'], ['b.0', 'e.0'], ['c.0'], ['d.0'], ['a.1'], ['b.1', 'e.1'], ['c.1'], ['d.1']]
     iterated = []
 
     for index, node in enumerate(iterator):
         iterated.append(node)
-        if index == 7:
-            break
+        if index > len(expected):
+            pytest.fail('iterator iterations exceeded length of expected values!')
 
     assert iterated == expected
 
 def test_tasks_iterator(sample_graph):
     graph, cycles_removed = decyclify(sample_graph, 'a')
 
-    iterator = TasksIterator(graph)
+    iterator = TasksIterator(graph, cycles=2)
 
     expected = [['a.0'], ['b.0', 'e.0', 'a.1'], ['c.0', 'b.1'], ['d.0', 'c.1'], ['d.1']]
     iterated = []
 
     for index, node in enumerate(iterator):
         iterated.append(node)
-        if index == 7:
-            break
+        if index > len(expected):
+            pytest.fail('iterator iterations exceeded length of expected values!')
 
     # TODO: use iterator
 
