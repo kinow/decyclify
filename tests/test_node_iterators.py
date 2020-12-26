@@ -54,6 +54,4 @@ def test_tasks_iterator(sample_graph):
         if index > len(expected):
             pytest.fail('iterator iterations exceeded length of expected values!')
 
-    # TODO: use iterator
-
     assert iterated == expected
