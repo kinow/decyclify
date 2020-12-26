@@ -47,6 +47,8 @@ class CycleIterator:
         # if we have completed a cycle, we must reset the indexes
         if self.current_column == self.count_nodes - 1:
             self.current_cycle += 1
+            if (self.current_cycle >= self.cycles):
+                raise StopIteration
             self.current_column = -1
         nodes = []
         # if this is the first column, we know this task won't have any
