@@ -61,7 +61,7 @@ def test_tasks_iterator_validation_error(graph, cycles, error):
 def test_tasks_iterator(sample_graph):
     graph, cycles_removed = decyclify(sample_graph, 'a')
 
-    iterator = TasksIterator(graph, cycles=2)
+    iterator = TasksIterator(graph, cycles_removed, cycles=2)
 
     expected = [['a.0'], ['b.0', 'e.0', 'a.1'], ['c.0', 'b.1'], ['d.0', 'c.1'], ['d.1']]
     iterated = []
