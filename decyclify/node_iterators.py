@@ -125,7 +125,7 @@ class Cycle:
 
     def _remove_nodes(self, nodes):
         for (key, intraiteration_node) in enumerate(self.intraiteration_nodes):
-            for node in intraiteration_node:
+            for node in intraiteration_node.copy():
                 if node in nodes:
                     intraiteration_node.remove(node)
                     self.current_nodes.remove(node)
@@ -170,7 +170,7 @@ class Cycle:
                         # returned, so we are good to return this downstream dependency
                         if interiteration_trigger_node not in self.previous.current_nodes:
                             nodes.append(next_intraiteration_node)
-                            self._remove_nodes([next_intraiteration_node])
+                            self._remove_nodes([node])
         return nodes
 
 
@@ -221,7 +221,7 @@ class TasksIterator:
 
         # collect tasks/nodes ready to execute in each cycle
         new_nodes_in_this_cycle = []
-        for cycle in self.cycles:
+        for cycle in self.cycles.copy():
             try:
                 new_nodes_in_this_cycle.extend(cycle.iterate(new_nodes_in_this_cycle))
             except RemoveCycle:

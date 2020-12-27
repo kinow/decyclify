@@ -63,7 +63,7 @@ def test_tasks_iterator(sample_graph):
 
     iterator = TasksIterator(graph, cycles_removed, cycles=2)
 
-    expected = [['a.0'], ['b.0', 'e.0', 'a.1'], ['c.0', 'b.1'], ['d.0', 'c.1'], ['d.1']]
+    expected = [['a.0'], ['b.0', 'e.0', 'a.1'], ['c.0', 'b.1', 'e.1'], ['d.0', 'c.1'], ['d.1']]
     iterated = []
 
     for index, node in enumerate(iterator):
