@@ -56,7 +56,7 @@ def test_cycle_iterators(sample_graph):
 def test_tasks_iterator_validation_error(graph, cycles, error):
     with pytest.raises(error):
         # noinspection PyTypeChecker
-        TasksIterator(graph, cycles)
+        TasksIterator(graph=graph, cycles_removed=[], cycles=cycles)
 
 def test_tasks_iterator(sample_graph):
     graph, cycles_removed = decyclify(sample_graph, 'a')
