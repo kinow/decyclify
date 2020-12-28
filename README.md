@@ -27,6 +27,30 @@ in the graph between cycles.
 
 ![Inter-iteration matrix](./docs/assets/images/inter-iteration-matrix.png)
 
+## Node Iterators
+
+This is not part of the paper. Here we show how the algorithm can be used to first remove the
+cycles. Next, we use the matrices to decide how to traverse the graph.
+
+![Graph unrolling](./docs/assets/images/graph-unroll.png)
+
+The first iterator, the `CycleIterator` simply goes through all the tasks in the cycles and executes
+them in order. The `decyclify` function is used to avoid repeating a node due to a cycle.
+
+The second iterator available is the `TasksIterator`. With this, for each cycle it returns the next tasks
+available, as well as any tasks in the next cycles that can be returned.
+
+A task is considered ready to be returned when its sibling in the previous cycle has been executed, and after
+its inter-cycle dependency (if any) has been satisfied as well.
+
+It should be possible to use these iterators, or create new ones, and apply it to tools
+such as workflow managers that support only DAG scheduling, to schedule an infinite
+graph, via graph-unrolling. The next cycle is simply an integer counter incremented,
+but could be an ISO8601 date-time function.
+
+> NOTE: this part of the project was a summer holidays project, and is in need of documentation,
+> more tests, code review, etc. Feel free to submit pull requests.
+
 ## Changelog
 
 **0.1 (2020-??-??)**
