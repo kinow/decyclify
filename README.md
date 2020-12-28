@@ -5,7 +5,7 @@
 
 Graph decyclify algorithm implementation as in Sandnes &amp; Sinnen paper (2004) in Python.
 
-"A new strategy for multiprocessor scheduling of cyclic task graphs", link to [article in Research Gate](https://www.researchgate.net/publication/220298826_A_new_strategy_for_multiprocessor_scheduling_of_cyclic_task_graphs).
+**"A new strategy for multiprocessor scheduling of cyclic task graphs", link to [article in Research Gate](https://www.researchgate.net/publication/220298826_A_new_strategy_for_multiprocessor_scheduling_of_cyclic_task_graphs).**
 
 See open issues for current status of the project.
 
@@ -45,7 +45,7 @@ its inter-cycle dependency (if any) has been satisfied as well.
 
 It should be possible to use these iterators, or create new ones, and apply it to tools
 such as workflow managers that support only DAG scheduling, to schedule an infinite
-graph, via graph-unrolling. The next cycle is simply an integer counter incremented,
+graph, via **graph-unrolling**. The next cycle is simply an integer counter incremented,
 but could be an ISO8601 date-time function.
 
 > NOTE: this part of the project was a summer holidays project, and is in need of documentation,
