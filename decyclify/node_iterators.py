@@ -195,7 +195,7 @@ class TasksIterator:
         self.graph = graph
         self.nodes = [node for node in self.graph.nodes]
         self.intraiteration_matrix = np.array(create_intraiteration_matrix(graph), copy=True)
-        self.interiteration_matrix = np.array(create_interiteration_matrix(graph.nodes, cycles_removed), copy=True)
+        self.interiteration_matrix = np.array(create_interiteration_matrix(list(graph.nodes), cycles_removed), copy=True)
 
         # here we create a linked-list of cycles; where each cycle knows its previous
         # cycle and the next cycle (if available).
