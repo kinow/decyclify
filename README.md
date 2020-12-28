@@ -23,6 +23,7 @@ in the graph between cycles.
 
 **0.1 (2020-??-??)**
 
+- Added a couple of node iterators. With these, it is possible to iterate the graph per cycle, or per task. This latter enables a task to start as soon as its sibling in a previous cycle has been executed, as long as there are no inter-cycle dependencies. 
 - [#3](https://github.com/kinow/decyclify/issues/3) Implemented the algorithm to unroll a graph using the Decyclify algorithm
 - [#10](https://github.com/kinow/decyclify/issues/10) Create intraiteration matrix (D) and interiteration matrix (C)
 - [#2](https://github.com/kinow/decyclify/issues/2) Graph input
