@@ -9,6 +9,10 @@ Graph decyclify algorithm implementation as in Sandnes &amp; Sinnen paper (2004)
 
 See open issues for current status of the project.
 
+![Graph with cycles](./docs/assets/images/withcycles.png)
+
+![Graph without cycles](./docs/assets/images/nocycles.png)
+
 ## decyclify algorithm
 
 The algorithm uses two matrices, `D` and `C`.
@@ -16,8 +20,12 @@ The algorithm uses two matrices, `D` and `C`.
 `D` is the **intraiteration dependencies** matrix. It represents the dependencies
 in the graph within a cycle.
 
+![Intra-iteration matrix](./docs/assets/images/intra-iteration-matrix.png)
+
 `C` is the **interiteration dependencies** matrix. It represents the dependencies
 in the graph between cycles.
+
+![Inter-iteration matrix](./docs/assets/images/inter-iteration-matrix.png)
 
 ## Changelog
 
