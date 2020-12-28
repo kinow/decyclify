@@ -23,6 +23,7 @@ in the graph between cycles.
 
 **0.1 (2020-??-??)**
 
+- [#3](https://github.com/kinow/decyclify/issues/3) Implemented the algorithm to unroll a graph using the Decyclify algorithm
 - [#10](https://github.com/kinow/decyclify/issues/10) Create intraiteration matrix (D) and interiteration matrix (C)
 - [#2](https://github.com/kinow/decyclify/issues/2) Graph input
 - [#1](https://github.com/kinow/decyclify/issues/1) Build and packaging
