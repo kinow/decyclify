@@ -53,7 +53,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     version=__version__,
-    packages=find_packages(include=["decyclify.*"]),
+    packages=find_packages(include=["decyclify"]),
     install_requires=install_requires,
     tests_require=tests_require,
     extras_require=extras_require,
